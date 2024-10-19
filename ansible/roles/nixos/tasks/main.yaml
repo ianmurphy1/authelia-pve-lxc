@@ -1,0 +1,26 @@
+---
+- name: Initialise nix channel
+  ansible.builtin.command:
+    cmd: nix-channel --update
+
+- name: Reboot and wait
+  ansible.builtin.reboot:
+    search_paths:
+      - /run/current-system/sw/bin
+
+- name: Copy nix files to etc folder
+  ansible.builtin.copy:
+    src: "./{{ item }}.nix"
+    dest: /etc/nixos
+  with_items:
+    - configuration
+    - flake
+
+- name: Generate nixos configs
+  ansible.builtin.command:
+    cmd: nixos-generate-config
+
+- name: Update nix
+  ansible.builtin.command:
+    cmd: nixos-rebuild switch --flake .#
+    chdir: /etc/nixos

@@ -1,0 +1,5 @@
+- name: Update authelia nix
+  hosts: tag_authelia
+  remote_user: root
+  roles:
+    - nixos
