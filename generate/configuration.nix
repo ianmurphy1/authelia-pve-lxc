@@ -76,4 +76,7 @@
     vim
   ];
 
+  environment.sessionVariables = {
+    EDITOR = "vim";
+  };
 }

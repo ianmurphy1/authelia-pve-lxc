@@ -38,7 +38,7 @@
   ansible.builtin.command:
     cmd: nixos-generate-config
 
-- name: Update nix
-  ansible.builtin.command:
-    cmd: nixos-rebuild switch --flake .#
-    chdir: /etc/nixos
+#- name: Update nix
+#  ansible.builtin.command:
+#    cmd: nixos-rebuild switch --flake .#
+#    chdir: /etc/nixos
