@@ -33,6 +33,7 @@ resource "proxmox_virtual_environment_container" "authelia" {
         trimspace(data.local_file.ssh_public_key.content)
       ]
     }
+
     ip_config {
       ipv4 {
         address = "dhcp"
@@ -41,12 +42,17 @@ resource "proxmox_virtual_environment_container" "authelia" {
   }
 
   disk {
-    size = 20
+    size = 8
     datastore_id = "local-lvm"
+  }
+
+  memory {
+    dedicated = 1024 * 1
   }
 
   network_interface {
     name = "eth0"
+    mac_address = "BC:24:11:FF:3B:84"
   }
 
   features {

@@ -17,5 +17,10 @@ configure:
   cd ./ansible && \
     ansible-playbook -i inventory/proxmox.yaml playbook.yaml
 
+test:
+  cd ./ansible && \
+    ansible-playbook -i inventory/proxmox.yaml update.yaml
+
+
 doit:
   just build deploy configure

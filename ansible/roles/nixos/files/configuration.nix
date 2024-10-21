@@ -3,18 +3,30 @@
   lib,
   pkgs,
   modulesPath,
+  inputs,
   ...
 }:
 
 {
   imports = [
-    ./hardware-configuration.nix
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
+    ./hardware-configuration.nix
+    inputs.sops-nix.nixosModules.sops
   ];
 
-  environment.systemPackages = with pkgs; [
-    python3
-  ];
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    age = {
+      sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
+      keyFile = "/var/lib/sops-nix/key.txt";
+      generateKey = true;
+    };
+    secrets = {
+      pve_token = {
+        neededForUsers = true;
+      };
+    };
+  };
 
   system.stateVersion = "24.11";
   services.sshd.enable = true;
@@ -73,4 +85,11 @@
     NjtqY45e3g98ykzfuRqd
     -----END CERTIFICATE-----
   ''];
+
+  environment.systemPackages = with pkgs; [
+    python3
+    sops
+    vim
+  ];
+
 }

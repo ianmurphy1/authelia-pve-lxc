@@ -3,6 +3,7 @@
   lib,
   pkgs,
   modulesPath,
+  inputs,
   ...
 }:
 
@@ -11,11 +12,7 @@
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
   ];
 
-  environment.systemPackages = with pkgs; [
-    python3
-  ];
-
-  system.stateVersion = "24.05";
+  system.stateVersion = "24.11";
   services.sshd.enable = true;
   users.users.root.password = "nixos";
   services.openssh.settings.PermitRootLogin = lib.mkOverride 999 "yes";
@@ -72,4 +69,11 @@
     NjtqY45e3g98ykzfuRqd
     -----END CERTIFICATE-----
   ''];
+
+  environment.systemPackages = with pkgs; [
+    python3
+    sops
+    vim
+  ];
+
 }

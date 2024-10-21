@@ -16,6 +16,24 @@
     - configuration
     - flake
 
+- name: Generate age key and get resulting private key
+  shell:
+    mkdir -p ~/.config/sops/age;
+    nix-shell -p ssh-to-age --run "ssh-to-age -private-key -i /etc/ssh/ssh_host_ed25519_key > ~/.config/sops/age/keys.txt";
+    nix-shell -p age --run "age-keygen -y ~/.config/sops/age/keys.txt";
+  register: ageres
+
+- name: Update keys file
+  ansible.builtin.shell: |
+    yq -i '.keys[1] |= "{{ ageres.stdout | quote}}"' ../.sops.yaml;
+    sops updatekeys -y ../secrets.yaml
+  delegate_to: localhost
+
+- name: Copy secrets onto instance
+  ansible.builtin.copy:
+    src: "../../../secrets.yaml"
+    dest: /etc/nixos
+
 - name: Generate nixos configs
   ansible.builtin.command:
     cmd: nixos-generate-config
