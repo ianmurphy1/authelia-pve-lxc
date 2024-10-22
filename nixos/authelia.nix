@@ -1,5 +1,20 @@
 { pkgs, config, lib, ... }:
 {
+  sops.secrets = {
+    jwt = {
+      owner = config.systemd.services.authelia-main.serviceConfig.User;
+    };
+    storage_key = {
+      owner = config.systemd.services.authelia-main.serviceConfig.User;
+    };
+    session_secret = {
+      owner = config.systemd.services.authelia-main.serviceConfig.User;
+    };
+    user_password = {
+      owner = config.systemd.services.authelia-main.serviceConfig.User;
+    };
+  };
+
   services.authelia = {
     instances = {
       main = {
@@ -46,6 +61,21 @@
     };
     access_control = {
       default_policy = "one_factor";
+    };
+  };
+
+  sops.templates."authelia/users.yaml" = {
+    owner = "authelia-main";
+    file = (pkgs.formats.yaml {}).generate "yaml" {
+      users = {
+        ian = {
+          disabled = false;
+          displayname = "ian";
+          password = "${config.sops.placeholder.user_password}";
+          email = "ian@home.com";
+          groups = [ "admin" ];
+        };
+      };
     };
   };
 }

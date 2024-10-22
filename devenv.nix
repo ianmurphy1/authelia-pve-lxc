@@ -1,25 +1,13 @@
 { pkgs, lib, config, inputs, ... }:
 
 {
-  env.REQUESTS_CA_BUNDLE = "/home/ian/.step/certs/root_ca.crt";
-  env.ANSIBLE_HOST_KEY_CHECKING = "False";
-
   # https://devenv.sh/packages/
-  packages = [
-    pkgs.nixos-generators
+  packages = with pkgs; [
+    nixos-generators
   ];
 
   languages = {
     opentofu.enable = true;
-    python = {
-      enable = true;
-      venv = {
-        enable = true;
-        requirements = ''
-          ansible
-        '';
-      };
-    };
   };
 
   enterShell = ''

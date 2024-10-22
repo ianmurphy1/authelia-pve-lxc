@@ -21,7 +21,6 @@
         specialArgs = {inherit inputs;};
         modules = [
           ./configuration.nix
-          ./providers.nix
           ./authelia.nix
           ./lldap.nix
         ];

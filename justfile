@@ -13,11 +13,6 @@ destroy:
       -var-file ./variable.tfvars \
       -destroy
 
-configure:
-  cd ./ansible && \
-    ansible-playbook -i inventory/proxmox.yaml playbook.yaml && \
-    cd - && cp ./secrets.yaml ./nixos
-
 secrets:
   ./script.sh
 

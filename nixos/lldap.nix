@@ -1,5 +1,13 @@
 { pkgs, config, lib, ... }:
 {
+  sops.secrets = {
+    lldap_admin_pass = {
+      owner = config.systemd.services.lldap.serviceConfig.User;
+    };
+    lldap_jwt = {
+      owner = config.systemd.services.lldap.serviceConfig.User;
+    };
+  };
   services.lldap = {
     enable = true;
     settings = {

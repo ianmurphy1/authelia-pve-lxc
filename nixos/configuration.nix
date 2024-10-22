@@ -21,42 +21,8 @@
       keyFile = "/var/lib/sops-nix/key.txt";
       generateKey = true;
     };
-    secrets = {
-      jwt = {
-        owner = config.systemd.services.authelia-main.serviceConfig.User;
-      };
-      storage_key = {
-        owner = config.systemd.services.authelia-main.serviceConfig.User;
-      };
-      session_secret = {
-        owner = config.systemd.services.authelia-main.serviceConfig.User;
-      };
-      user_password = {
-        owner = config.systemd.services.authelia-main.serviceConfig.User;
-      };
-      lldap_admin_pass = {
-        owner = config.systemd.services.lldap.serviceConfig.User;
-      };
-      lldap_jwt = {
-        owner = config.systemd.services.lldap.serviceConfig.User;
-      };
-    };
   };
 
-  sops.templates."authelia/users.yaml" = {
-    owner = "authelia-main";
-    file = (pkgs.formats.yaml {}).generate "yaml" {
-      users = {
-        ian = {
-          disabled = false;
-          displayname = "ian";
-          password = "${config.sops.placeholder.user_password}";
-          email = "ian@home.com";
-          groups = [ "admin" ];
-        };
-      };
-    };
-  };
 
   system.stateVersion = "24.11";
   services.sshd.enable = true;
