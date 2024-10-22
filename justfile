@@ -15,7 +15,12 @@ destroy:
 
 configure:
   cd ./ansible && \
-    ansible-playbook -i inventory/proxmox.yaml playbook.yaml
+    ansible-playbook -i inventory/proxmox.yaml playbook.yaml && \
+    cd - && cp ./secrets.yaml ./nixos
+
+update:
+  cd ./nixos && \
+  nixos-rebuild switch --flake .#authelia --target-host root@192.168.1.45
 
 test:
   cd ./ansible && \
@@ -23,4 +28,4 @@ test:
 
 
 doit:
-  just build deploy configure
+  just build deploy configure update

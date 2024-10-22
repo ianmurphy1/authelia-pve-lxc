@@ -22,6 +22,8 @@
         modules = [
           ./configuration.nix
           ./providers.nix
+          ./config.nix
+          ./lldap.nix
         ];
       };
   };

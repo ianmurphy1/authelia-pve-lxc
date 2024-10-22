@@ -10,6 +10,7 @@
 {
   imports = [
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
+    inputs.sops-nix.nixosModules.sops
   ];
 
   system.stateVersion = "24.11";
@@ -78,5 +79,13 @@
 
   environment.sessionVariables = {
     EDITOR = "vim";
+  };
+  users.users.lldap = {
+    uid = 99;
+    group = "lldap";
+  };
+
+  users.groups.lldap = {
+    gid = 99;
   };
 }

@@ -17,6 +17,7 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./configuration.nix
+          ./config.nix
         ];
         format = "proxmox-lxc";
       };

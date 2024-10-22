@@ -2,5 +2,4 @@
   hosts: tag_authelia
   remote_user: root
   roles:
-    - secrets
     - nixos

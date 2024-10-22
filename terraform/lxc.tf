@@ -50,6 +50,10 @@ resource "proxmox_virtual_environment_container" "authelia" {
     dedicated = 1024 * 1
   }
 
+  cpu {
+    cores = 1
+  }
+
   network_interface {
     name = "eth0"
     mac_address = "BC:24:11:FF:3B:84"
@@ -62,11 +66,11 @@ resource "proxmox_virtual_environment_container" "authelia" {
 }
 
 data "external" "lxc_ip" {
+  # Needed to ensure lxc has a network connection
+  # before saying it's created
   program = ["bash", "./scripts/wait_for_ip.sh"]
 
   query = {
-    # arbitrary map from strings to strings, passed
-    # to the external program as the data query.
     lxc_id = proxmox_virtual_environment_container.authelia.id
     iname = proxmox_virtual_environment_container.authelia.network_interface[0].name
     token = data.sops_file.secrets.data["pve_token"]

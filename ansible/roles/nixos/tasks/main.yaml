@@ -8,14 +8,6 @@
     search_paths:
       - /run/current-system/sw/bin
 
-- name: Copy nix files to etc folder
-  ansible.builtin.copy:
-    src: "./{{ item }}.nix"
-    dest: /etc/nixos
-  with_items:
-    - configuration
-    - flake
-
 - name: Generate age key and get resulting private key
   shell:
     mkdir -p ~/.config/sops/age;
@@ -38,7 +30,8 @@
   ansible.builtin.command:
     cmd: nixos-generate-config
 
-#- name: Update nix
-#  ansible.builtin.command:
-#    cmd: nixos-rebuild switch --flake .#
-#    chdir: /etc/nixos
+- name: Get remote hardware-configuraion nix
+  ansible.builtin.fetch:
+    src: /etc/nixos/hardware-configuration.nix
+    dest: ../nixos/
+    flat: true

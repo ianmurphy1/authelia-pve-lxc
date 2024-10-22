@@ -23,13 +23,37 @@
     };
     secrets = {
       jwt = {
-        owner = "authelia-main";
+        owner = config.systemd.services.authelia-main.serviceConfig.User;
       };
       storage_key = {
-        owner = "authelia-main";
+        owner = config.systemd.services.authelia-main.serviceConfig.User;
       };
       session_secret = {
-        owner = "authelia-main";
+        owner = config.systemd.services.authelia-main.serviceConfig.User;
+      };
+      user_password = {
+        owner = config.systemd.services.authelia-main.serviceConfig.User;
+      };
+      lldap_admin_pass = {
+        owner = config.systemd.services.lldap.serviceConfig.User;
+      };
+      lldap_jwt = {
+        owner = config.systemd.services.lldap.serviceConfig.User;
+      };
+    };
+  };
+
+  sops.templates."authelia/users.yaml" = {
+    owner = "authelia-main";
+    file = (pkgs.formats.yaml {}).generate "yaml" {
+      users = {
+        ian = {
+          disabled = false;
+          displayname = "ian";
+          password = "${config.sops.placeholder.user_password}";
+          email = "ian@home.com";
+          groups = [ "admin" ];
+        };
       };
     };
   };
@@ -79,7 +103,7 @@
       /etc/authelia
   '';
 
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 17170 ];
   security.pki.certificates = [''
     -----BEGIN CERTIFICATE-----
     MIIBizCCATKgAwIBAgIRAKk5OPRJ23w2j0GTbnjESPYwCgYIKoZIzj0EAwIwJDEM
@@ -113,5 +137,13 @@
 
   environment.sessionVariables = {
     EDITOR = "vim";
+  };
+  users.users.lldap = {
+    uid = 99;
+    group = "lldap";
+  };
+
+  users.groups.lldap = {
+    gid = 99;
   };
 }
