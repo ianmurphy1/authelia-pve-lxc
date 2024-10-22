@@ -18,6 +18,9 @@ configure:
     ansible-playbook -i inventory/proxmox.yaml playbook.yaml && \
     cd - && cp ./secrets.yaml ./nixos
 
+secrets:
+  ./script.sh
+
 update:
   cd ./nixos && \
   nixos-rebuild switch --flake .#authelia --target-host root@192.168.1.45
@@ -28,4 +31,4 @@ test:
 
 
 doit:
-  just build deploy configure update
+  just build deploy secrets update

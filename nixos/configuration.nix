@@ -83,19 +83,6 @@
     '';
   };
 
-  services.authelia = {
-    instances = {
-      main = {
-        enable = true;
-        secrets.jwtSecretFile = config.sops.secrets.jwt.path;
-        secrets.sessionSecretFile = config.sops.secrets.session_secret.path;
-        secrets.storageEncryptionKeyFile = config.sops.secrets.storage_key.path;
-        settingsFiles = [
-          "/etc/authelia/config.yaml"
-        ];
-      };
-    };
-  };
 
   system.activationScripts.autheliaDirs = lib.stringAfter [ "etc" ] ''
     mkdir -p /etc/authelia
@@ -118,16 +105,6 @@
     -----END CERTIFICATE-----
   ''];
 
-  environment.etc."authelia/providers.yaml".source = (pkgs.formats.yaml { }).generate "YAML" {
-    identity_providers = {
-      oidc = {
-        clients = [{
-          client_id = "argocd_client_id";
-          client_name = "ArgoCD";
-        }];
-      };
-    };
-  };
 
   environment.systemPackages = with pkgs; [
     python3

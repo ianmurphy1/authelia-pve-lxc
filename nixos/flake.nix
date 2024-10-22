@@ -22,7 +22,7 @@
         modules = [
           ./configuration.nix
           ./providers.nix
-          ./config.nix
+          ./authelia.nix
           ./lldap.nix
         ];
       };

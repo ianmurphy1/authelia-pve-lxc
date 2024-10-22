@@ -1,5 +1,0 @@
-- name: Test
-  hosts: tag_authelia
-  remote_user: root
-  roles:
-    - nixos
