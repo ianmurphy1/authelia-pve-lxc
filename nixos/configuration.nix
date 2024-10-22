@@ -49,7 +49,6 @@
     '';
   };
 
-
   system.activationScripts.autheliaDirs = lib.stringAfter [ "etc" ] ''
     mkdir -p /etc/authelia
     chown -R authelia-main:authelia-main \
@@ -70,7 +69,6 @@
     NjtqY45e3g98ykzfuRqd
     -----END CERTIFICATE-----
   ''];
-
 
   environment.systemPackages = with pkgs; [
     python3

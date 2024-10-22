@@ -13,6 +13,12 @@
     user_password = {
       owner = config.systemd.services.authelia-main.serviceConfig.User;
     };
+    authelia_oidc_private_key = {
+      owner = config.systemd.services.authelia-main.serviceConfig.User;
+    };
+    hmac_secret = {
+      owner = config.systemd.services.authelia-main.serviceConfig.User;
+    };
   };
 
   services.authelia = {
@@ -24,26 +30,16 @@
         secrets.storageEncryptionKeyFile = config.sops.secrets.storage_key.path;
         settingsFiles = [
           "/etc/authelia/config.yaml"
+          "${config.sops.templates."authelia/providers.yaml".path}"
         ];
-      };
-    };
-  };
-
-  environment.etc."authelia/providers.yaml".source = (pkgs.formats.yaml { }).generate "YAML" {
-    identity_providers = {
-      oidc = {
-        clients = [{
-          client_id = "argocd_client_id";
-          client_name = "ArgoCD";
-        }];
+        environmentVariables = {
+          X_AUTHELIA_CONFIG_FILTERS = "template";
+        };
       };
     };
   };
 
   environment.etc."authelia/config.yaml".source = (pkgs.formats.yaml {}).generate "yaml" {
-    authentication_backend = {
-      file.path = "${config.sops.templates."authelia/users.yaml".path}";
-    };
     log = {
       level = "info";
     };
@@ -62,6 +58,9 @@
     access_control = {
       default_policy = "one_factor";
     };
+    authentication_backend = {
+      file.path = config.sops.templates."authelia/users.yaml".path;
+    };
   };
 
   sops.templates."authelia/users.yaml" = {
@@ -73,7 +72,10 @@
           displayname = "ian";
           password = "${config.sops.placeholder.user_password}";
           email = "ian@home.com";
-          groups = [ "admin" ];
+          groups = [
+            "admin"
+            "argocd-admin"
+          ];
         };
       };
     };

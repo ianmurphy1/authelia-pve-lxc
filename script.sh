@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-set -e#x
+set -e #x
 
+# Remove existing SSH key from known_hosts file
+# ssh config is setup to accept new keys from
+# 192.168.1.45/24 IPs
 sed -i '/^192.168.1.45/d' ~/.ssh/known_hosts
 
 AGE_KEY=$(ssh -T root@192.168.1.45 <<'EOL'
