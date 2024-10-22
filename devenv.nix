@@ -17,9 +17,6 @@
         enable = true;
         requirements = ''
           ansible
-          requests
-          hvac
-          jmespath
         '';
       };
     };
