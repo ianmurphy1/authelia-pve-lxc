@@ -19,7 +19,7 @@
               client_name: ArgoCD
               client_secret: ${config.sops.placeholder.authelia_argocd_client_secret_hash}
               public: false
-              authorization_policy: two_factor
+              authorization_policy: one_factor
               redirect_uris:
                 - https://argocd.k3s.home/auth/callback
               scopes:
@@ -30,5 +30,4 @@
               userinfo_signed_response_alg: none
     '';
   };
-
 }

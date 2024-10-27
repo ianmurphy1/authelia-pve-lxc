@@ -1,6 +1,8 @@
 { pkgs, lib, config, inputs, ... }:
 
 {
+  env.APP = "authelia";
+  env.IP = "192.168.1.45";
   # https://devenv.sh/packages/
   packages = with pkgs; [
     nixos-generators

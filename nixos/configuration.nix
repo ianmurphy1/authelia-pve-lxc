@@ -7,6 +7,9 @@
   ...
 }:
 
+let
+  secretspath = builtins.toString inputs.mysecrets;
+in
 {
   imports = [
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
@@ -15,14 +18,13 @@
   ];
 
   sops = {
-    defaultSopsFile = ./secrets.yaml;
+    defaultSopsFile = "${secretspath}/authelia.secrets.yaml";
     age = {
       sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
       keyFile = "/var/lib/sops-nix/key.txt";
       generateKey = true;
     };
   };
-
 
   system.stateVersion = "24.11";
   services.sshd.enable = true;
@@ -71,20 +73,10 @@
   ''];
 
   environment.systemPackages = with pkgs; [
-    python3
-    sops
     vim
   ];
 
   environment.sessionVariables = {
     EDITOR = "vim";
-  };
-  users.users.lldap = {
-    uid = 99;
-    group = "lldap";
-  };
-
-  users.groups.lldap = {
-    gid = 99;
   };
 }

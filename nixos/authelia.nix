@@ -1,5 +1,6 @@
 { pkgs, config, lib, ... }:
 {
+
   sops.secrets = {
     jwt = {
       owner = config.systemd.services.authelia-main.serviceConfig.User;

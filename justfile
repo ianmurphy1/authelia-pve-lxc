@@ -14,11 +14,12 @@ destroy:
       -destroy
 
 secrets:
-  ./script.sh
+  lxcsecrets
 
 update:
   cd ./nixos && \
-  nixos-rebuild switch --flake .#authelia --target-host root@192.168.1.45
+  nix flake update && \
+  nixos-rebuild switch --flake .#authelia --target-host root@${IP}
 
 test:
   cd ./ansible && \
