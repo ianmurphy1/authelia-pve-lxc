@@ -34,6 +34,12 @@ in
 
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
+    substituters = [
+      "https://ncps.home"
+    ];
+    trusted-public-keys = [
+      "ncps.home:6qNYS6mjcO2Ef2VcmIEC7rX4ZMP91PL74oP2cO9JJcU="
+    ];
   };
   
   services.caddy = {
